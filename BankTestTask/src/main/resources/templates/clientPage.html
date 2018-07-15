@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Client page</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8"
+	src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+</head>
+<body>
+	<table id="myTable" class="display" style="margin: auto;">
+		<thead>
+			<tr class="header">
+				<th>Id</th>
+				<th>Money</th>
+				<th>Data</th>
+			</tr>
+		</thead>
+		<th:block th:each="account : ${accounts}">
+			<tr>
+				<td th:text="${account.id}"></td>
+				<td><a th:href="@{'/account/' + ${account.id}}"><p
+							th:text="${account.money}"></p></a></td>
+				<td th:text="${account.data}"></td>
+			</tr>
+		</th:block>
+	</table>
+	<div style="border-style: solid; margin: auto;">
+		<form action="#" th:action="@{'/addAccount'}"
+			th:object="${freshAccount}" method="post">
+			<input type="hidden" th:value="${client.id}" th:attr="name='id'" />
+			<p>
+				Money: <input type="number" th:field="*{money}" />
+			</p>
+			<p>
+				<input type="submit" value="Add new account" /> <input type="reset"
+					value="Reset" />
+			</p>
+		</form>
+	</div>
+	<script>
+		$(document).ready(function() {
+			$('#myTable').DataTable();
+		});
+	</script>
+	<a th:href="@{'/'}">Back</a>
+</body>
+</html>

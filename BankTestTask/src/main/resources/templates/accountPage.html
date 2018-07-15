@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Account page</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8"
+	src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+
+</head>
+<body>
+	<table id="myTable" class="display" style="margin: auto;">
+		<thead>
+			<tr class="header">
+				<th>Id</th>
+				<th>Amount</th>
+				<th>Sender</th>
+				<th>Receiver</th>
+				<th>Data</th>
+			</tr>
+		</thead>
+		<th:block th:each="transaction : ${transactions}">
+			<tr>
+				<td th:text="${transaction.id}"></td>
+				<td th:text="${transaction.amount}"></td>
+				<td
+					th:text="${transaction.sender.client.name}+ ' ' + ${transaction.sender.client.address}"></td>
+				<td
+					th:text="${transaction.receiver.client.name}+ ' ' + ${transaction.receiver.client.address}"></td>
+				<td th:text="${transaction.data}"></td>
+			</tr>
+		</th:block>
+	</table>
+
+	<div style="border-style: solid; margin: auto;">
+		<form action="#" th:action="@{'/addTransaction/'}"
+			th:object="${freshTransaction}" method="post">
+
+			<input type="hidden" th:value="${account.id}" th:attr="name='sender'" />
+			<p>
+				Receiver: <input type="number" th:field="*{receiver}" />
+			</p>
+			<p>
+				Money: <input type="number" th:field="*{amount}" />
+			</p>
+			<p>
+				<input type="submit" value="Add new transaction" /> <input
+					type="reset" value="Reset" />
+			</p>
+		</form>
+	</div>
+
+	<a th:href="@{'/client/' + ${account.id}}">Back</a>
+	<script>
+		$(document).ready(function() {
+			$('#myTable').DataTable();
+		});
+	</script>
+</body>
+</html>

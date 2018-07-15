@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Index</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8"
+	src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+</head>
+<body>
+	<h1 style="margin: auto;">Одесский банк "Однорукий Джо" таки имеет
+		что вам предложить</h1>
+
+	<table id="myTable" class="display" style="margin: auto;">
+		<thead>
+			<tr class="header">
+				<th>Id</th>
+				<th>Name</th>
+				<th>Address</th>
+			</tr>
+		</thead>
+		<th:block th:each="client : ${clients}">
+			<tr>
+				<td style="width: 20%;" th:text="${client.id}"></td>
+				<td style="width: 20%;"><a
+					th:href="@{'/client/' + ${client.id}}"><p
+							th:text="${client.name}"></p></a></td>
+				<td style="width: 20%;" th:text="${client.address}"></td>
+			</tr>
+		</th:block>
+	</table>
+
+	<div style="border-style: solid; margin: auto;">
+		<form action="#" th:action="@{'/addClient'}" th:object="${recruit}"
+			method="post">
+			<table>
+				<tr>
+					<td>Name:</td>
+					<td><input type="text" th:field="*{name}" /></td>
+				</tr>
+				<tr>
+					<td>Age:</td>
+					<td><input type="text" th:field="*{age}" /></td>
+				</tr>
+
+				<tr>
+					<td><button type="submit">Submit</button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+
+	<script>
+		$(document).ready(function() {
+			$('#myTable').DataTable();
+		});
+	</script>
+</body>
+</html>
