@@ -1,6 +1,6 @@
 # BankTestTask
 Inroduction:
-Pay attention that you have to write your own username and password to connect to DB into aplication.properties.
+Pay attention that you have to write your own username and password to connect to DB into aplication.properties and make schema "bankDB".
 Then from command line you call maven:
 
         mvn install 
