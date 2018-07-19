@@ -27,7 +27,7 @@ public class Transaction {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	@NonNull
-	private int amount;
+	private long amount;
 	@ManyToOne
 	@JoinColumn(name = "send")
 	@NonNull

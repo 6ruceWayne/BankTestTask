@@ -10,9 +10,10 @@
 <script type="text/javascript" charset="utf8"
 	src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 
-
 </head>
 <body>
+	<p th:text="id+ ' = '+ ${account.id}">
+	<p th:text="money+ ' = ' + ${account.money}">
 	<table id="myTable" class="display" style="margin: auto;">
 		<thead>
 			<tr class="header">
@@ -27,10 +28,8 @@
 			<tr>
 				<td th:text="${transaction.id}"></td>
 				<td th:text="${transaction.amount}"></td>
-				<td
-					th:text="${transaction.sender.client.name}+ ' ' + ${transaction.sender.client.address}"></td>
-				<td
-					th:text="${transaction.receiver.client.name}+ ' ' + ${transaction.receiver.client.address}"></td>
+				<td th:text="${transaction.sender.client.name}"></td>
+				<td th:text="${transaction.receiver.client.name}"></td>
 				<td th:text="${transaction.data}"></td>
 			</tr>
 		</th:block>
@@ -39,18 +38,22 @@
 	<div style="border-style: solid; margin: auto;">
 		<form action="#" th:action="@{'/addTransaction/'}"
 			th:object="${freshTransaction}" method="post">
-
-			<input type="hidden" th:value="${account.id}" th:attr="name='sender'" />
-			<p>
-				Receiver: <input type="number" th:field="*{receiver}" />
-			</p>
-			<p>
-				Money: <input type="number" th:field="*{amount}" />
-			</p>
-			<p>
-				<input type="submit" value="Add new transaction" /> <input
-					type="reset" value="Reset" />
-			</p>
+			<table>
+				<tr>
+					<td><input type="hidden" th:value="${account.id}"
+						th:attr="name='sender'" /></td>
+					<td>Receiver:</td>
+					<td><input type="number" th:field="*{receiver}" /></td>
+					<td th:if="${#fields.hasErrors('receiver')}"
+						th:errors="*{receiver}">Name Error</td>
+					<td>Money:</td>
+					<td><input type="number" th:field="*{amount}" /></td>
+					<td th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Name
+						Error</td>
+					<td><input type="submit" value="Add new transaction" /></td>
+					<td><input type="reset" value="Reset" /></td>
+				</tr>
+			</table>
 		</form>
 	</div>
 

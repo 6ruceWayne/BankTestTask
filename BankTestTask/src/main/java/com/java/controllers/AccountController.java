@@ -1,8 +1,11 @@
 package com.java.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +42,14 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "/addAccount", method = RequestMethod.POST)
-	public String createAccount(@ModelAttribute("freshAccount") AccountForm form, Model model) {
+	public String createAccount(@Valid @ModelAttribute("freshAccount") AccountForm form, BindingResult result,
+			Model model) {
+		if (result.hasErrors()) {
+			Client client = cltSer.findById(form.getClientId());
+			model.addAttribute("client", client);
+			model.addAttribute("accounts", accSer.findAllByClient(client));
+			return "clientPage";
+		}
 		accSer.addAccount(form);
 		return "redirect:/client/" + form.getClientId();
 	}
@@ -55,8 +65,23 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "/addTransaction", method = RequestMethod.POST)
-	public String makeTransaction(@ModelAttribute("freshTransaction") TransactionForm form, Model model) {
-		System.out.println("Here we are!");
+	public String makeTransaction(@Valid @ModelAttribute("freshTransaction") TransactionForm form, BindingResult result,
+			Model model) {
+		if (result.hasErrors()) {
+			Account account = accSer.findById(form.getSender());
+			model.addAttribute("client", account.getClient());
+			model.addAttribute("account", account);
+			model.addAttribute("transactions", trnSer.findAllByAccount(account));
+			return "accountPage";
+		}
+		if (form.getAmount() > accSer.findById(form.getSender()).getMoney()) {
+			result.rejectValue("amount", "errors.signup.email", "You don't have enough money to this transaction");
+			Account account = accSer.findById(form.getSender());
+			model.addAttribute("client", account.getClient());
+			model.addAttribute("account", account);
+			model.addAttribute("transactions", trnSer.findAllByAccount(account));
+			return "accountPage";
+		}
 		trnSer.makeTransaction(form);
 		return "redirect:/account/" + form.getSender();
 	}

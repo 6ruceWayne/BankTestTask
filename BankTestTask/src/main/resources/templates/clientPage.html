@@ -32,7 +32,7 @@
 	<div style="border-style: solid; margin: auto;">
 		<form action="#" th:action="@{'/addAccount'}"
 			th:object="${freshAccount}" method="post">
-			<input type="hidden" th:value="${client.id}" th:attr="name='id'" />
+			<input type="hidden" th:value="${client.id}" th:attr="name='clientId'" />
 			<p>
 				Money: <input type="number" th:field="*{money}" />
 			</p>

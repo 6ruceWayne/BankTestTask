@@ -51,8 +51,9 @@ public class TransactionService implements ITransactionService {
 	@Override
 	public List<Transaction> findAllByAccount(Account account) {
 		// TODO Auto-generated method stub
-		List<Transaction> allTransactions = traRep.findByReceiver(account);
-		allTransactions.addAll(traRep.findByReceiver(account));
+		List<Transaction> allTransactions = traRep.findTransactionBySender(account);
+		List<Transaction> received = traRep.findTransactionByReceiver(account);
+		allTransactions.addAll(received);
 		allTransactions = allTransactions.stream().distinct().sorted((e1, e2) -> e2.getData().compareTo(e1.getData()))
 				.collect(Collectors.toList());
 		return allTransactions;
@@ -72,6 +73,9 @@ public class TransactionService implements ITransactionService {
 		List<Transaction> received = reciever.getReceived();
 		received.add(transaction);
 		reciever.setReceived(received);
+
+		sender.setMoney(sender.getMoney() - form.getAmount());
+		reciever.setMoney(reciever.getMoney() + form.getAmount());
 
 		traRep.save(transaction);
 		accRep.save(sender);

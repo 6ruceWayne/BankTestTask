@@ -10,7 +10,7 @@ import com.java.entities.Transaction;
 
 @Repository
 public interface ITransactionRepository extends JpaRepository<Transaction, Long> {
-	public List<Transaction> findBySender(Account account);
-	
-	public List<Transaction> findByReceiver(Account account);
+	public List<Transaction> findTransactionBySender(Account account);
+
+	public List<Transaction> findTransactionByReceiver(Account account);
 }
